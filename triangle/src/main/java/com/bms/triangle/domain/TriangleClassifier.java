@@ -13,14 +13,14 @@ public final class TriangleClassifier {
      * @return the triangle's type
      */
     public static TriangleType classify(final Triangle triangle) {
-        if (triangle.firstSide() == triangle.secondSide()
-            && triangle.secondSide() == triangle.thirdSide()) {
+        if (triangle.firstSide().compareTo(triangle.secondSide()) == 0
+            && triangle.secondSide().compareTo(triangle.thirdSide()) == 0) {
             return TriangleType.EQUILATERAL;
         }
 
-        if (triangle.firstSide() == triangle.secondSide()
-            || triangle.firstSide() == triangle.thirdSide()
-            || triangle.secondSide() == triangle.thirdSide()) {
+        if (triangle.firstSide().compareTo(triangle.secondSide()) == 0
+            || triangle.firstSide().compareTo(triangle.thirdSide()) == 0
+            || triangle.secondSide().compareTo(triangle.thirdSide()) == 0) {
             return TriangleType.ISOSCELES;
         }
 

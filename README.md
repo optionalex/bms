@@ -2,7 +2,7 @@
 
 A command-line application that accepts three numbers representing the side lengths of a triangle and classifies it as **Equilateral**, **Isosceles**, or **Scalene**.
 
-Side lengths must be positive finite numbers and satisfy the triangle inequality. Invalid input is reported on standard error.
+Side lengths must be positive decimal numbers and satisfy the triangle inequality. Invalid input is reported on standard error.
 
 The project keeps domain rules independent from command-line concerns. The CLI creates domain objects, invokes classification, and presents the result.
 
@@ -14,9 +14,9 @@ The project keeps domain rules independent from command-line concerns. The CLI c
 
 ## Assumptions
 
-- The CLI receives exactly three values that Java can parse as `double` values.
-- Side lengths must be positive, finite, and satisfy the strict triangle inequality.
-- Side equality is exact; no rounding tolerance is applied.
+- The CLI receives exactly three decimal values accepted by `BigDecimal`.
+- Side lengths must be positive and satisfy the strict triangle inequality. Degenerate (flat) triangles, where two sides sum exactly to the third, are rejected.
+- Decimal arithmetic and side equality are exact; values such as `0.1` and `0.10` are numerically equal.
 - Classification is based only on side lengths, not angles or units. Equilateral means all three sides are equal, isosceles means exactly two are equal, and scalene means all three differ.
 
 ## Package and Run from a JAR
@@ -33,5 +33,4 @@ The example prints `Scalene`.
 
 ## Possible Future Improvements
 
-- Use `BigDecimal` instead of `double` if exact decimal precision or a wider numeric range is required; this would also change input parsing and the domain's arithmetic and equality rules.
 - Consider Lombok (for example, `@UtilityClass`) if utility-class boilerplate grows enough to justify the extra dependency and annotation processing.
