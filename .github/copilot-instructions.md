@@ -3,7 +3,7 @@
 ## Functional Style
 - Prefer pure functions: for the same inputs, return the same result without side effects.
 - Prefer immutable data. Use `final` for local variables and fields when they should not be reassigned, and use records for suitable immutable data carriers.
-- Declare all method, constructor, and lambda parameters `final`.
+- Declare all method, constructor, and lambda parameters `final`, including parameters of the single abstract method in an `@FunctionalInterface`.
 - Keep side effects, such as console input/output, at the application boundary; keep domain logic deterministic and independently testable.
 
 ## Domain-Driven Design

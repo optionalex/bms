@@ -4,35 +4,34 @@ A command-line application that accepts three numbers representing the side leng
 
 Side lengths must be positive finite numbers and satisfy the triangle inequality. Invalid input is reported on standard error.
 
-The domain model and classification rules live in `com.bms.triangle.domain`. The command-line adapter in `com.bms.triangle.cli` parses arguments and prints the result.
+The project keeps domain rules independent from command-line concerns. The CLI creates domain objects, invokes classification, and presents the result.
 
-## Project Structure
+## Domain-Driven Design
 
-```text
-triangle/
-	src/main/java/com/bms/triangle/
-		App.java                         Application entry point
-		cli/TriangleCli.java             Parses arguments and handles console I/O
-		domain/Triangle.java             Validated triangle value object
-		domain/TriangleClassifier.java   Classifies valid triangles
-		domain/TriangleType.java         Classification labels
-	src/test/java/com/bms/triangle/
-		AppTest.java                     CLI behavior tests
-		domain/TriangleTest.java         Triangle invariant tests
-		domain/TriangleClassifierTest.java Classification tests
-```
+- **Domain:** Models a valid triangle and enforces its side-length invariants. Classification rules map a triangle to its type and display label.
+- **CLI adapter:** Parses command-line arguments, invokes the domain behavior, and writes results or errors to the console.
+- **Entry point:** Starts the CLI adapter. The application is small enough that it does not currently need separate application or infrastructure layers.
 
-Run the application from the `triangle` directory:
+## Assumptions
+
+- The CLI receives exactly three values that Java can parse as `double` values.
+- Side lengths must be positive, finite, and satisfy the strict triangle inequality.
+- Side equality is exact; no rounding tolerance is applied.
+- Classification is based only on side lengths, not angles or units. Equilateral means all three sides are equal, isosceles means exactly two are equal, and scalene means all three differ.
+
+## Package and Run from a JAR
+
+From the `triangle` directory, build the executable JAR and run it with three side lengths:
 
 ```bash
 mvn test
-mvn compile
-java -cp target/classes com.bms.triangle.App 3 4 5
+mvn clean package
+java -jar target/triangle-1.0-SNAPSHOT.jar 3 4 5
 ```
 
 The example prints `Scalene`.
 
 ## Possible Future Improvements
 
+- Use `BigDecimal` instead of `double` if exact decimal precision or a wider numeric range is required; this would also change input parsing and the domain's arithmetic and equality rules.
 - Consider Lombok (for example, `@UtilityClass`) if utility-class boilerplate grows enough to justify the extra dependency and annotation processing.
-- Split `domain` into `domain.model` and `domain.service` if the domain grows enough for the extra package structure to improve clarity.
