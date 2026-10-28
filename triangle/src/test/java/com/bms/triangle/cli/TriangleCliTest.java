@@ -58,7 +58,7 @@ class TriangleCliTest {
         assertEquals(2, result.exitCode());
         assertTrue(result.stdout().isEmpty());
         assertEquals(
-            "Error: Side lengths must be valid decimal numbers." + System.lineSeparator(),
+                "Error: Side lengths must be valid numbers." + System.lineSeparator(),
             result.stderr());
     }
 
@@ -74,15 +74,17 @@ class TriangleCliTest {
                 result.stderr());
     }
 
-    /** Verifies that decimal values outside the {@code double} range are accepted. */
+    /** Verifies that decimal values outside the finite {@code double} range are rejected. */
     @ParameterizedTest
     @ValueSource(strings = {"1e309", "1e-4000"})
-    void acceptsSidesOutsideDoubleRange(final String side) throws Exception {
+    void rejectsSidesOutsideDoubleRange(final String side) throws Exception {
         final var result = runCli(side, side, side);
 
-        assertEquals(0, result.exitCode());
-        assertEquals("Equilateral" + System.lineSeparator(), result.stdout());
-        assertTrue(result.stderr().isEmpty());
+        assertEquals(2, result.exitCode());
+        assertTrue(result.stdout().isEmpty());
+        assertEquals(
+                "Error: Side lengths must be positive finite numbers." + System.lineSeparator(),
+                result.stderr());
     }
 
     /** Runs the application in a child JVM so its exit call cannot terminate the test process.

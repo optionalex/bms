@@ -2,7 +2,6 @@ package com.bms.triangle.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.math.BigDecimal;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -21,9 +20,9 @@ class TriangleClassifierTest {
         "0.1, 0.10, 0.100, EQUILATERAL"
     })
     void classifiesTriangleTypes(
-            final BigDecimal firstSide,
-            final BigDecimal secondSide,
-            final BigDecimal thirdSide,
+            final double firstSide,
+            final double secondSide,
+            final double thirdSide,
             final TriangleType expectedType) {
         assertEquals(
                 expectedType,

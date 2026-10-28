@@ -2,7 +2,6 @@ package com.bms.triangle.cli;
 
 import com.bms.triangle.domain.Triangle;
 import com.bms.triangle.domain.TriangleClassifier;
-import java.math.BigDecimal;
 
 /** Parses triangle side lengths, classifies the triangle, and writes the result to the console. */
 public final class TriangleCli {
@@ -13,8 +12,8 @@ public final class TriangleCli {
 
     /** Runs the command-line application with the supplied arguments.
      *
-    * <p>Exactly three positive decimal side lengths are expected. Invalid input is reported on
-     * standard error and terminates the process with status code {@code 2}.
+     * <p>Exactly three positive, finite values accepted by {@link Double#parseDouble(String)} are expected.
+     * Invalid input is reported on standard error and terminates the process with status code {@code 2}.
      *
      * @param args command-line arguments containing the three side lengths
      */
@@ -37,17 +36,17 @@ public final class TriangleCli {
         }
     }
 
-    /** Parses a command-line value as a decimal number.
+    /** Parses a side length using {@link Double#parseDouble(String)}.
      *
      * @param argument text supplied for a side length
      * @return the parsed side length
-     * @throws IllegalArgumentException if the argument is not a valid decimal number
+     * @throws IllegalArgumentException if the argument is not accepted by {@link Double#parseDouble(String)}
      */
-    private static BigDecimal parseSide(final String argument) {
+    private static double parseSide(final String argument) {
         try {
-            return new BigDecimal(argument);
+            return Double.parseDouble(argument);
         } catch (final NumberFormatException exception) {
-            throw new IllegalArgumentException("Side lengths must be valid decimal numbers.", exception);
+            throw new IllegalArgumentException("Side lengths must be valid numbers.", exception);
         }
     }
 }

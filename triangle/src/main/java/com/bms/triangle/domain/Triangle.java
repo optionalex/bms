@@ -1,6 +1,6 @@
 package com.bms.triangle.domain;
 
-import java.math.BigDecimal;
+import java.util.Arrays;
 
 /** An immutable triangle whose side lengths are positive and satisfy the strict triangle inequality.
  *
@@ -8,31 +8,45 @@ import java.math.BigDecimal;
  * @param secondSide length of the second side
  * @param thirdSide length of the third side
  */
-public record Triangle(BigDecimal firstSide, BigDecimal secondSide, BigDecimal thirdSide) {
+public record Triangle(double firstSide, double secondSide, double thirdSide) {
 
     /** Creates a triangle after validating its side lengths.
      *
-    * @throws IllegalArgumentException if any side is null or not positive, or the sides do not
-    *     satisfy the strict triangle inequality
+     * @throws IllegalArgumentException if any side is not positive and finite, or the sides do not
+     *     satisfy the strict triangle inequality
      */
     public Triangle {
-        if (!isPositive(firstSide) || !isPositive(secondSide) || !isPositive(thirdSide)) {
-            throw new IllegalArgumentException("Side lengths must be positive decimal numbers.");
+        if (!isPositiveFinite(firstSide) || !isPositiveFinite(secondSide) || !isPositiveFinite(thirdSide)) {
+            throw new IllegalArgumentException("Side lengths must be positive finite numbers.");
         }
 
-        if (firstSide.add(secondSide).compareTo(thirdSide) <= 0
-                || firstSide.add(thirdSide).compareTo(secondSide) <= 0
-                || secondSide.add(thirdSide).compareTo(firstSide) <= 0) {
+        if (!satisfiesTriangleInequality(firstSide, secondSide, thirdSide)) {
             throw new IllegalArgumentException("Side lengths must satisfy the triangle inequality.");
         }
     }
 
-    /** Checks whether a side length is non-null and greater than zero.
+    /** Sorts the sides and checks the strict triangle inequality without summing large sides.
+     *
+     * @param firstSide length of the first side
+     * @param secondSide length of the second side
+     * @param thirdSide length of the third side
+     * @return {@code true} when the sides form a nondegenerate triangle
+     */
+    private static boolean satisfiesTriangleInequality(
+            final double firstSide,
+            final double secondSide,
+            final double thirdSide) {
+        final var sides = new double[] {firstSide, secondSide, thirdSide};
+        Arrays.sort(sides);
+        return sides[0] > sides[2] - sides[1];
+    }
+
+    /** Checks whether a side length is finite and greater than zero.
      *
      * @param side side length to validate
-     * @return {@code true} when the side is positive
+     * @return {@code true} when the side is positive and finite
      */
-    private static boolean isPositive(final BigDecimal side) {
-        return side != null && side.signum() > 0;
+    private static boolean isPositiveFinite(final double side) {
+        return Double.isFinite(side) && side > 0;
     }
 }
